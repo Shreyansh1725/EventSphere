@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Coordinator Dashboard";
+}
+
+<h2 class="text-primary mb-4">Coordinator Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-primary shadow h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Total Requests</h5>
+                <h2 class="display-4">@ViewBag.TotalRequests</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-success shadow h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Approved & Published</h5>
+                <h2 class="display-4">@ViewBag.Approved</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-warning text-dark shadow h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Pending Approval</h5>
+                <h2 class="display-4">@ViewBag.Pending</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card text-white bg-danger shadow h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">Rejected</h5>
+                <h2 class="display-4">@ViewBag.Rejected</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="RequestEvent" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Request New Event</a>
+    <a asp-action="MyRequests" class="btn btn-outline-secondary btn-lg ms-2">View My Requests</a>
+</div>

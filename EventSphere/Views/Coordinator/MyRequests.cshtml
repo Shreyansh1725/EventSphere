@@ -1,0 +1,59 @@
+@model IEnumerable<EventSphere.Models.Event>
+@{
+    ViewData["Title"] = "My Event Requests";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary mb-0">My Event Requests</h2>
+    <a asp-action="RequestEvent" class="btn btn-primary"><i class="fas fa-plus"></i> New Request</a>
+</div>
+
+<div class="card shadow">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Category</th>
+                        <th>Date & Time</th>
+                        <th>Venue Requested</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(!Model.Any()) {
+                        <tr><td colspan="5" class="text-center py-4">No event requests found.</td></tr>
+                    }
+                    @foreach (var evt in Model)
+                    {
+                        <tr>
+                            <td><strong>@evt.EventName</strong></td>
+                            <td>@evt.CategoryName</td>
+                            <td>@evt.EventDate.ToShortDateString() @(evt.StartTime?.ToString(@"hh\:mm"))</td>
+                            <td>@evt.Venue</td>
+                            <td>
+                                @if (evt.Status == "Published")
+                                {
+                                    <span class="badge bg-success">Approved (Published)</span>
+                                }
+                                else if (evt.Status == "PendingApproval")
+                                {
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                }
+                                else if (evt.Status == "Rejected")
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@evt.Status</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

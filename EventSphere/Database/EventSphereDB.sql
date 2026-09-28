@@ -1,0 +1,104 @@
+USE master;
+GO
+
+IF DB_ID('EventSphereDB') IS NOT NULL
+BEGIN
+    ALTER DATABASE EventSphereDB SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE EventSphereDB;
+END
+GO
+
+CREATE DATABASE EventSphereDB;
+GO
+
+USE EventSphereDB;
+GO
+
+CREATE TABLE Users (
+    UserId INT PRIMARY KEY IDENTITY,
+    FullName NVARCHAR(100) NOT NULL,
+    EnrollmentNumber NVARCHAR(20) NULL,
+    Email NVARCHAR(150) NOT NULL UNIQUE,
+    Phone NVARCHAR(15) NULL,
+    Department NVARCHAR(100) NULL,
+    Semester INT NULL,
+    PasswordHash NVARCHAR(MAX) NOT NULL,
+    Role NVARCHAR(20) NOT NULL,
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
+
+CREATE TABLE EventCategories (
+    CategoryId INT PRIMARY KEY IDENTITY,
+    CategoryName NVARCHAR(100) NOT NULL,
+    Description NVARCHAR(500) NULL,
+    IsActive BIT NOT NULL DEFAULT 1
+);
+GO
+
+CREATE TABLE Events (
+    EventId INT PRIMARY KEY IDENTITY,
+    EventName NVARCHAR(200) NOT NULL,
+    Description NVARCHAR(2000) NULL,
+    CategoryId INT NOT NULL FOREIGN KEY REFERENCES EventCategories(CategoryId),
+    Venue NVARCHAR(200) NOT NULL,
+    EventDate DATETIME NOT NULL,
+    StartTime TIME NULL,
+    EndTime TIME NULL,
+    Organizer NVARCHAR(200) NULL,
+    MaximumParticipants INT NOT NULL DEFAULT 100,
+    AvailableSeats INT NOT NULL DEFAULT 100,
+    RegistrationDeadline DATETIME NULL,
+    ImagePath NVARCHAR(500) NULL,
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Draft',
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
+
+CREATE TABLE Registrations (
+    RegistrationId INT PRIMARY KEY IDENTITY,
+    EventId INT NOT NULL FOREIGN KEY REFERENCES Events(EventId),
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    RegistrationCode NVARCHAR(50) NOT NULL UNIQUE,
+    RegistrationDate DATETIME NOT NULL DEFAULT GETDATE(),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Registered'
+);
+GO
+
+CREATE TABLE Attendance (
+    AttendanceId INT PRIMARY KEY IDENTITY,
+    RegistrationId INT NOT NULL FOREIGN KEY REFERENCES Registrations(RegistrationId),
+    AttendanceStatus NVARCHAR(50) NOT NULL DEFAULT 'Absent',
+    MarkedAt DATETIME NULL,
+    MarkedBy NVARCHAR(100) NULL
+);
+GO
+
+CREATE TABLE Volunteers (
+    VolunteerId INT PRIMARY KEY IDENTITY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(UserId),
+    EventId INT NOT NULL FOREIGN KEY REFERENCES Events(EventId),
+    AssignedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Active'
+);
+GO
+
+CREATE TABLE Notifications (
+    NotificationId INT PRIMARY KEY IDENTITY,
+    UserId INT NULL FOREIGN KEY REFERENCES Users(UserId),
+    Title NVARCHAR(200) NOT NULL,
+    Message NVARCHAR(1000) NOT NULL,
+    IsRead BIT NOT NULL DEFAULT 0,
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+);
+GO
+
+CREATE TABLE Certificates (
+    CertificateId INT PRIMARY KEY IDENTITY,
+    RegistrationId INT NOT NULL FOREIGN KEY REFERENCES Registrations(RegistrationId),
+    CertificateNumber NVARCHAR(100) NOT NULL UNIQUE,
+    IssueDate DATETIME NOT NULL DEFAULT GETDATE(),
+    Status NVARCHAR(50) NOT NULL DEFAULT 'Issued'
+);
+GO

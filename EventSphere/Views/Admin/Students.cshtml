@@ -1,0 +1,52 @@
+@model IEnumerable<EventSphere.Models.User>
+@{
+    ViewData["Title"] = "Manage Students";
+}
+
+<h2 class="text-primary mb-4">Manage Students</h2>
+
+<div class="card shadow">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Enrollment</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>Sem</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>@s.FullName</td>
+                            <td>@s.EnrollmentNumber</td>
+                            <td>@s.Email</td>
+                            <td>@s.Department</td>
+                            <td>@s.Semester</td>
+                            <td>
+                                @if (s.IsActive) { <span class="badge bg-success">Active</span> }
+                                else { <span class="badge bg-danger">Inactive</span> }
+                            </td>
+                            <td>
+                                @if (s.IsActive)
+                                {
+                                    <a asp-action="ToggleStudent" asp-route-id="@s.UserId" asp-route-active="false" class="btn btn-sm btn-outline-danger">Deactivate</a>
+                                }
+                                else
+                                {
+                                    <a asp-action="ToggleStudent" asp-route-id="@s.UserId" asp-route-active="true" class="btn btn-sm btn-outline-success">Activate</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

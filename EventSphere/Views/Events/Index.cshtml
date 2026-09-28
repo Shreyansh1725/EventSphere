@@ -1,0 +1,71 @@
+@model EventSphere.ViewModels.EventFilterViewModel
+@{
+    ViewData["Title"] = "Browse Events";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-primary mb-0">Browse Events</h2>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-4">
+                <input asp-for="SearchTerm" name="search" class="form-control" placeholder="Search events, venue..." value="@Model.SearchTerm" />
+            </div>
+            <div class="col-md-3">
+                <select asp-for="CategoryId" name="categoryId" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.CategoryId">@cat.CategoryName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select asp-for="DateFilter" name="dateFilter" class="form-select">
+                    <option value="">Any Date</option>
+                    <option value="upcoming">Upcoming</option>
+                    <option value="past">Past</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    @if (!Model.Events.Any())
+    {
+        <div class="col-12 text-center py-5">
+            <p class="text-muted lead">No events found matching your criteria.</p>
+        </div>
+    }
+    
+    @foreach (var evt in Model.Events)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-info text-dark">@evt.CategoryName</span>
+                        <span class="text-muted small"><i class="fas fa-calendar"></i> @evt.EventDate.ToShortDateString()</span>
+                    </div>
+                    <h5 class="card-title text-primary fw-bold mt-2">@evt.EventName</h5>
+                    <p class="card-text text-truncate">@evt.Description</p>
+                    
+                    <ul class="list-unstyled small mb-4">
+                        <li><strong>Venue:</strong> @evt.Venue</li>
+                        <li><strong>Time:</strong> @(evt.StartTime?.ToString(@"hh\:mm")) - @(evt.EndTime?.ToString(@"hh\:mm"))</li>
+                        <li><strong>Seats Left:</strong> <span class="text-success fw-bold">@evt.AvailableSeats</span> / @evt.MaximumParticipants</li>
+                    </ul>
+                </div>
+                <div class="card-footer bg-white border-top-0 pb-3">
+                    <a asp-action="Details" asp-route-id="@evt.EventId" class="btn btn-outline-primary w-100">View Details</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

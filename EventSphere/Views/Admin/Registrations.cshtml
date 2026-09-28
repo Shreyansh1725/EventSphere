@@ -1,0 +1,47 @@
+@model IEnumerable<EventSphere.Models.Registration>
+@{
+    ViewData["Title"] = "Manage Registrations";
+}
+
+<h2 class="text-primary mb-4">Manage Registrations</h2>
+
+<div class="card shadow">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Reg ID</th>
+                        <th>Student Name</th>
+                        <th>Enrollment</th>
+                        <th>Event Name</th>
+                        <th>Date Registered</th>
+                        <th>Status</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reg in Model)
+                    {
+                        <tr>
+                            <td><strong>@reg.RegistrationCode</strong></td>
+                            <td>@reg.StudentName</td>
+                            <td>@reg.EnrollmentNumber</td>
+                            <td>@reg.EventName</td>
+                            <td>@reg.RegistrationDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                @if (reg.Status == "Registered") { <span class="badge bg-success">Registered</span> }
+                                else { <span class="badge bg-secondary">@reg.Status</span> }
+                            </td>
+                            <td>
+                                @if (reg.AttendanceStatus == "Present") { <span class="badge bg-success">Present</span> }
+                                else if (reg.AttendanceStatus == "Absent") { <span class="badge bg-danger">Absent</span> }
+                                else { <span class="text-muted">Not Marked</span> }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

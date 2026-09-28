@@ -1,0 +1,98 @@
+@{
+    ViewData["Title"] = "Reports & Notifications";
+    var dtEvents = ViewBag.EventRegistrations as System.Data.DataTable;
+    var dtDept = ViewBag.DepartmentParticipation as System.Data.DataTable;
+}
+
+<h2 class="text-primary mb-4">Reports & Notifications</h2>
+
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="card shadow border-warning border-top border-4">
+            <div class="card-header bg-white">
+                <h5 class="text-warning text-dark mb-0"><i class="fas fa-bell"></i> Send Global Notification</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="SendNotification" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input name="title" class="form-control" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Message</label>
+                        <textarea name="message" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-warning text-dark">Send to All Students</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="text-primary mb-0">Event-wise Registrations & Attendance</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Event Name</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Total Reg.</th>
+                            <th>Max Seats</th>
+                            <th>Present</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(dtEvents != null) {
+                            foreach (System.Data.DataRow row in dtEvents.Rows)
+                            {
+                                <tr>
+                                    <td>@row["EventName"]</td>
+                                    <td>@(((DateTime)row["EventDate"]).ToShortDateString())</td>
+                                    <td>@row["CategoryName"]</td>
+                                    <td><strong>@row["TotalRegistrations"]</strong></td>
+                                    <td>@row["MaximumParticipants"]</td>
+                                    <td><span class="text-success fw-bold">@row["Attended"]</span></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <h5 class="text-primary mb-0">Department-wise Participation</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Department</th>
+                            <th>Total Students Registered</th>
+                            <th>Total Registrations (Across Events)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(dtDept != null) {
+                            foreach (System.Data.DataRow row in dtDept.Rows)
+                            {
+                                <tr>
+                                    <td>@row["Department"]</td>
+                                    <td>@row["TotalStudents"]</td>
+                                    <td><strong>@row["TotalRegistrations"]</strong></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

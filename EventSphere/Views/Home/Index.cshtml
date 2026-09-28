@@ -1,0 +1,43 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center mt-5">
+    <h1 class="display-4 text-primary fw-bold">Welcome to EventSphere</h1>
+    <p class="lead">The ultimate College Event & Activity Management System.</p>
+    
+    <div class="mt-4">
+        <a asp-controller="Events" asp-action="Index" class="btn btn-primary btn-lg mx-2">Browse Events</a>
+        @if (Context.Session.GetInt32("UserId") == null)
+        {
+            <a asp-controller="Account" asp-action="Register" class="btn btn-outline-secondary btn-lg mx-2">Register Now</a>
+        }
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title text-primary">Discover Events</h5>
+                <p class="card-text">Explore technical, cultural, and sports events happening in the college.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title text-success">Easy Registration</h5>
+                <p class="card-text">Register for events seamlessly and track your participation effortlessly.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title text-info">Earn Certificates</h5>
+                <p class="card-text">Attend events and download your participation certificates directly.</p>
+            </div>
+        </div>
+    </div>
+</div>

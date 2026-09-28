@@ -1,0 +1,64 @@
+@model IEnumerable<EventSphere.Models.Event>
+@{
+    ViewData["Title"] = "Event Requests";
+}
+
+<h2 class="text-primary mb-4">Event Requests (Pending Approval)</h2>
+
+<div class="card shadow">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Category</th>
+                        <th>Date & Time</th>
+                        <th>Requested Venue</th>
+                        <th>Coordinator</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(!Model.Any()) {
+                        <tr><td colspan="6" class="text-center py-4">No pending requests at the moment.</td></tr>
+                    }
+                    @foreach (var evt in Model)
+                    {
+                        <tr>
+                            <td><strong>@evt.EventName</strong></td>
+                            <td>@evt.CategoryName</td>
+                            <td>@evt.EventDate.ToShortDateString() @(evt.StartTime?.ToString(@"hh\:mm"))</td>
+                            <td>@evt.Venue</td>
+                            <td>@evt.Organizer</td>
+                            <td>
+                                <form asp-action="HandleRequest" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@evt.EventId" />
+                                    <button type="submit" name="actionType" value="Approve" class="btn btn-sm btn-success">Approve</button>
+                                    <button type="submit" name="actionType" value="Reject" class="btn btn-sm btn-danger ms-1">Reject</button>
+                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-info ms-1" data-bs-toggle="modal" data-bs-target="#modal-@evt.EventId">Details</button>
+                                
+                                <!-- Details Modal -->
+                                <div class="modal fade" id="modal-@evt.EventId" tabindex="-1">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">@evt.EventName</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                      </div>
+                                      <div class="modal-body text-wrap">
+                                        <p><strong>Description:</strong> @evt.Description</p>
+                                        <p><strong>Max Participants:</strong> @evt.MaximumParticipants</p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,141 @@
+@model EventSphere.ViewModels.AttendanceViewModel
+@{
+    ViewData["Title"] = "Volunteers & Attendance";
+}
+
+<h2 class="text-primary mb-4">Volunteers & Attendance</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Attendance" method="get" class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label class="col-form-label fw-bold">Select Event:</label>
+            </div>
+            <div class="col-md-6">
+                <select name="eventId" class="form-select" onchange="this.form.submit()">
+                    <option value="">-- Select an Event --</option>
+                    @foreach (var e in Model.Events)
+                    {
+                        if (Model.SelectedEventId == e.EventId)
+                        {
+                            <option value="@e.EventId" selected>@e.EventName (@e.EventDate.ToShortDateString())</option>
+                        }
+                        else
+                        {
+                            <option value="@e.EventId">@e.EventName (@e.EventDate.ToShortDateString())</option>
+                        }
+                    }
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.SelectedEventId.HasValue)
+{
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow border-info border-top border-4">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="text-info mb-0">SECTION A: Volunteers</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AssignVolunteer" method="post" class="row g-3 mb-4">
+                        <input type="hidden" name="eventId" value="@Model.SelectedEventId" />
+                        <div class="col-md-6">
+                            <select name="userId" class="form-select" required>
+                                <option value="">-- Assign a Student as Volunteer --</option>
+                                @foreach(var s in Model.AvailableStudents)
+                                {
+                                    <option value="@s.UserId">@s.FullName (@s.EnrollmentNumber)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-info text-white">Assign Volunteer</button>
+                        </div>
+                    </form>
+                    
+                    <table class="table table-sm table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Enrollment</th>
+                                <th>Assigned At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(!Model.Volunteers.Any()) { <tr><td colspan="4" class="text-center">No volunteers assigned.</td></tr> }
+                            @foreach(var v in Model.Volunteers)
+                            {
+                                <tr>
+                                    <td>@v.StudentName</td>
+                                    <td>@v.EnrollmentNumber</td>
+                                    <td>@v.AssignedAt.ToShortDateString()</td>
+                                    <td>
+                                        <form asp-action="RemoveVolunteer" method="post">
+                                            <input type="hidden" name="eventId" value="@Model.SelectedEventId" />
+                                            <input type="hidden" name="volunteerId" value="@v.VolunteerId" />
+                                            <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card shadow border-primary border-top border-4">
+                <div class="card-header bg-white">
+                    <h5 class="text-primary mb-0">SECTION B: Attendance for @Model.SelectedEventName</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Reg Code</th>
+                                    <th>Student Name</th>
+                                    <th>Enrollment</th>
+                                    <th>Status</th>
+                                    <th>Mark Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.AttendanceRecords.Any())
+                                {
+                                    <tr><td colspan="5" class="text-center py-4">No registrations found for this event.</td></tr>
+                                }
+                                @foreach (var r in Model.AttendanceRecords)
+                                {
+                                    <tr>
+                                        <td><strong>@r.RegistrationCode</strong></td>
+                                        <td>@r.StudentName</td>
+                                        <td>@r.EnrollmentNumber</td>
+                                        <td>
+                                            @if(r.AttendanceStatus == "Present") { <span class="badge bg-success">Present</span> }
+                                            else if (r.AttendanceStatus == "Absent") { <span class="badge bg-danger">Absent</span> }
+                                            else { <span class="badge bg-secondary">Not Marked</span> }
+                                        </td>
+                                        <td>
+                                            <form asp-action="MarkAttendance" method="post" class="d-inline-flex gap-2">
+                                                <input type="hidden" name="eventId" value="@Model.SelectedEventId" />
+                                                <input type="hidden" name="regId" value="@r.RegistrationId" />
+                                                <button type="submit" name="status" value="Present" class="btn btn-sm btn-outline-success @(r.AttendanceStatus=="Present"?"active":"")">Present</button>
+                                                <button type="submit" name="status" value="Absent" class="btn btn-sm btn-outline-danger @(r.AttendanceStatus=="Absent"?"active":"")">Absent</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

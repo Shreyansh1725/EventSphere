@@ -1,0 +1,34 @@
+@model EventSphere.Models.Registration
+@{
+    ViewData["Title"] = "Registration Successful";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow border-success border-top border-4">
+            <div class="card-body p-5 text-center">
+                <div class="text-success mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                    </svg>
+                </div>
+                
+                <h2 class="text-success mb-3">Registration Successful!</h2>
+                <p class="lead mb-4">You have successfully registered for <strong>@Model.EventName</strong>.</p>
+                
+                <div class="bg-light p-4 rounded mb-4">
+                    <p class="text-muted mb-1">Your Registration ID is:</p>
+                    <h3 class="fw-bold text-primary font-monospace mb-0">@Model.RegistrationCode</h3>
+                </div>
+                
+                <p class="mb-4">Please keep this ID for future reference and attendance marking.</p>
+                
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a asp-controller="Student" asp-action="MyEvents" class="btn btn-primary px-4">View My Events</a>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-4">Browse More Events</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

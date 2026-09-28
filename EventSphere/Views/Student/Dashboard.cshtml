@@ -1,0 +1,83 @@
+@model EventSphere.ViewModels.StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="text-primary">Welcome, @Model.StudentName!</h2>
+        <p class="text-muted">Here is the summary of your event activities.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card bg-primary text-white h-100 shadow">
+            <div class="card-body text-center">
+                <h3 class="display-4">@Model.TotalRegisteredEvents</h3>
+                <p class="lead mb-0">Registered Events</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-success text-white h-100 shadow">
+            <div class="card-body text-center">
+                <h3 class="display-4">@Model.TotalAttendedEvents</h3>
+                <p class="lead mb-0">Attended Events</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-info text-white h-100 shadow">
+            <div class="card-body text-center">
+                <h3 class="display-4">@Model.AvailableCertificates</h3>
+                <p class="lead mb-0">Certificates</p>
+            </div>
+            @if(Model.AvailableCertificates > 0)
+            {
+                <div class="card-footer text-center bg-transparent border-top-0">
+                    <a asp-action="Certificates" class="text-white text-decoration-none">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card bg-warning text-dark h-100 shadow">
+            <div class="card-body text-center">
+                <h3 class="display-4">@Model.UnreadNotifications</h3>
+                <p class="lead mb-0">Unread Notifications</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 text-primary">Recent Notifications</h5>
+            </div>
+            <div class="card-body">
+                @if (!Model.RecentNotifications.Any())
+                {
+                    <p class="text-muted">No new notifications.</p>
+                }
+                else
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var notif in Model.RecentNotifications)
+                        {
+                            <li class="list-group-item">
+                                <div class="d-flex justify-content-between">
+                                    <strong>@notif.Title</strong>
+                                    <small class="text-muted">@notif.CreatedAt.ToShortDateString()</small>
+                                </div>
+                                <p class="mb-0 mt-1">@notif.Message</p>
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+</div>

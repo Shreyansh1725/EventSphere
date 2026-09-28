@@ -1,0 +1,54 @@
+@model EventSphere.Models.Certificate
+@{
+    Layout = null; // No layout for certificate view
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Certificate - @Model.CertificateNumber</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f4; text-align: center; padding: 20px; }
+        .cert-container { background: white; max-width: 800px; margin: 0 auto; padding: 40px; border: 15px solid #0d6efd; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.2); }
+        h1 { color: #0d6efd; font-size: 48px; margin-bottom: 10px; }
+        h2 { color: #555; font-size: 24px; font-weight: normal; margin-bottom: 40px; }
+        h3 { color: #333; font-size: 32px; margin-bottom: 20px; }
+        p { font-size: 20px; color: #666; margin-bottom: 20px; }
+        .event-name { font-size: 36px; color: #198754; font-weight: bold; margin: 30px 0; }
+        .footer { display: flex; justify-content: space-between; margin-top: 60px; border-top: 2px solid #eee; padding-top: 20px; }
+        .signature { text-align: center; }
+        .signature-line { width: 200px; border-bottom: 1px solid #333; margin-bottom: 10px; }
+        .btn-print { margin-top: 30px; padding: 10px 20px; background: #0d6efd; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        @@media print { .btn-print { display: none; } body { background: white; } .cert-container { border-width: 5px; box-shadow: none; } }
+    </style>
+</head>
+<body>
+    <div class="cert-container">
+        <h1>CERTIFICATE</h1>
+        <h2>OF PARTICIPATION</h2>
+        
+        <p>This is proudly presented to</p>
+        <h3>@Model.StudentName</h3>
+        
+        <p>for successfully participating in</p>
+        <div class="event-name">@Model.EventName</div>
+        
+        <p>held on <strong>@(Model.EventDate?.ToString("MMMM dd, yyyy"))</strong></p>
+        
+        <div class="footer">
+            <div>
+                <p style="font-size: 14px; text-align: left;">
+                    Certificate No: @Model.CertificateNumber<br />
+                    Issue Date: @Model.IssueDate.ToString("yyyy-MM-dd")<br />
+                    Reg Code: @Model.RegistrationCode
+                </p>
+            </div>
+            <div class="signature">
+                <div class="signature-line"></div>
+                <p style="font-size: 16px;">Event Coordinator</p>
+            </div>
+        </div>
+    </div>
+    
+    <button class="btn-print" onclick="window.print()">Print Certificate</button>
+</body>
+</html>

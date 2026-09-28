@@ -1,0 +1,28 @@
+@model IEnumerable<EventSphere.Models.Certificate>
+@{
+    ViewData["Title"] = "My Certificates";
+}
+
+<h2 class="text-primary mb-4">My Certificates</h2>
+
+<div class="row">
+    @if (!Model.Any())
+    {
+        <div class="col-12"><p class="text-muted">You have no certificates available yet. Attend events to earn them!</p></div>
+    }
+    
+    @foreach (var cert in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow h-100 border-primary border-top border-3">
+                <div class="card-body text-center">
+                    <i class="text-warning display-4 mb-3">🎓</i>
+                    <h5 class="card-title text-primary">@cert.EventName</h5>
+                    <p class="text-muted mb-2">Issued: @cert.IssueDate.ToShortDateString()</p>
+                    <p class="mb-3"><strong>ID:</strong> @cert.CertificateNumber</p>
+                    <a asp-action="ViewCertificate" asp-route-id="@cert.CertificateId" class="btn btn-primary w-100">View Certificate</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
