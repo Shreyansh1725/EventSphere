@@ -52,7 +52,8 @@ CREATE TABLE Events (
     RegistrationDeadline DATETIME NULL,
     ImagePath NVARCHAR(500) NULL,
     Status NVARCHAR(50) NOT NULL DEFAULT 'Draft',
-    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    CoordinatorId INT NULL FOREIGN KEY REFERENCES Users(UserId)
 );
 GO
 
